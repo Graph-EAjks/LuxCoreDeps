@@ -58,8 +58,14 @@ class OidnConan(ConanFile):
         print(res)
         git.clone(
             "https://github.com/OpenImageDenoise/oidn.git",
-            args=["--recursive", f"--branch v{self.version}"],
-            target=Path(self.source_folder) / "oidn"
+            args=[
+                "--recursive",
+                "--single-branch",
+                "--depth 1",
+                f"--branch v{self.version}",
+            ],
+            target=Path(self.source_folder) / "oidn",
+            hide_url=True,
         )
 
 

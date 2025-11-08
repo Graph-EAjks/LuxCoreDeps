@@ -28,17 +28,17 @@ function debug() {
 # Script starts here
 
 # 0. Initialize: set globals and install conan and ninja
-set -euxo pipefail
+set -exo pipefail
 
 if [[ "$RUNNER_OS" == "Linux" ]]; then
-  cache_dir=/conan-cache
+  cache_dir=/tmp/conan-cache
 else
   cache_dir=$WORKSPACE/conan-cache
 fi
 
 echo "::group::CIBW_BEFORE_BUILD: pip"
-pip install conan
-pip install ninja
+pipx install conan
+pipx install ninja
 echo "::endgroup::"
 
 # 1. Clone conancenter at a specific commit and add this cloned repo as a
@@ -50,22 +50,25 @@ echo "::endgroup::"
 #   updates
 # https://docs.conan.io/2/devops/devops_local_recipes_index.html
 echo "::group::CIBW_BEFORE_BUILD: local recipes index repository"
-git clone https://github.com/conan-io/conan-center-index
-cd conan-center-index
-git reset --hard 73bae27b468ae37f5bacd4991d1113aefcf23b2b
-git clean -df  # cleans any untracked files/folders
-cd ..
-conan remote add mycenter ./conan-center-index
+# Delete conan-center-index if exists
+if [ ! -d "conan-center-index" ]; then
+  git clone https://github.com/conan-io/conan-center-index
+  cd conan-center-index
+  git reset --hard 73bae27b468ae37f5bacd4991d1113aefcf23b2b
+  git clean -df  # cleans any untracked files/folders
+  cd ..
+fi
+conan remote add mycenter ./conan-center-index --force
 
 # 2. Add local recipe repository (as a remote)
-conan remote add mylocal ./conan-local-recipes
+conan remote add mylocal ./conan-local-recipes --force
 conan list -r mylocal
 echo "::endgroup::"
 
 if [[ "$RUNNER_OS" == "Linux" ]]; then
   # ispc
   echo "::group::CIBW_BEFORE_BUILD: ispc"
-  source /opt/intel/oneapi/ispc/latest/env/vars.sh
+  source /opt/intel/oneapi/setvars.sh
   echo "::endgroup::"
 fi
 

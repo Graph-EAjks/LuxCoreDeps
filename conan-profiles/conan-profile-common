@@ -18,6 +18,9 @@ doxygen/*:build_type=Release
 tools.system.package_manager:mode=install
 tools.deployer:symlinks=True
 tools.build:skip_test=True
+openimageio/*:tools.cmake.cmaketoolchain:extra_variables={ 'OIIO_BUILD_TOOLS':'OFF' }
+opencolorio/*:tools.cmake.cmaketoolchain:extra_variables={ 'OCIO_BUILD_APPS':'OFF' }
+
 
 [platform_tool_requires]
 cmake/*

@@ -12,6 +12,20 @@ __pycache__/
 # conan-cache content
 conan-cache/*
 
+# Conan cluttering files
+conanbuild.sh
+conanbuildenv-release-x86_64.sh
+conanrun.sh
+conanrunenv-release-x86_64.sh
+deactivate_conanbuild.sh
+deactivate_conanbuildenv-release-x86_64.sh
+deactivate_conanrun.sh
+
+# Build outputs
+conan-center-index
+graph.json
+list.json
+
 # Distribution / packaging
 .Python
 build/

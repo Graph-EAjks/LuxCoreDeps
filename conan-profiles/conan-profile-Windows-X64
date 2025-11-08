@@ -27,3 +27,5 @@ xapian-core/*:tools.build:cflags=!
 [options]
 openvdb/*:simd=AVX
 embree/*:shared=True
+
+# vim: ft=conf
