@@ -12,31 +12,31 @@ import os
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
 BOOST_VERSION = "1.88.0"
-DOXYGEN_VERSION = "1.14.0"
-EIGEN_VERSION = "5.0.0"
-EMBREE_VERSION = "4.3.3"
-FMT_VERSION = "12.0.0"
+DOXYGEN_VERSION = "1.16.1"
+EIGEN_VERSION = "5.0.1"
+EMBREE_VERSION = "4.4.0"
+FMT_VERSION = "12.1.0"
 GLFW_VERSION = "3.4"
 IMATH_VERSION = "3.2.1"
-IMGUI_VERSION = "1.92.4"
+IMGUI_VERSION = "1.92.5"
 IMGUIFILEDIALOG_VERSION = "0.6.7"
-JSON_VERSION = "3.12.0"
-LIBDEFLATE_VERSION = "1.23"
+LIBDEFLATE_VERSION = "1.25"
+LIBTIFF_VERSION = "4.7.1"
 MINIZIP_VERSION = "4.0.7"
-NINJA_VERSION = "1.13.1"
-NVRTC_VERSION = "13.0.88"
-OCIO_VERSION = "2.5.0"
-OIIO_VERSION = "3.1.6.2"
+NINJA_VERSION = "1.13.2"
+NLOHMANN_JSON_VERSION = "3.12.0"
+NVRTC_VERSION = "13.1.115"
+OCIO_VERSION = "2.5.1"
+OIIO_VERSION = "3.1.10.0"
 OIDN_VERSION = "2.3.3"
-OPENEXR_VERSION = "3.3.5"
-OPENJPH_VERSION = "0.24.2"
-OPENSUBDIV_VERSION = "3.6.0"
-OPENVDB_VERSION = "11.0.0"
+ONETBB_VERSION = "2022.3.0"
+OPENEXR_VERSION = "3.4.4"
+OPENJPH_VERSION = "0.25.3"
+OPENSUBDIV_VERSION = "3.7.0"
+OPENVDB_VERSION = "12.1.1"
 PYBIND11_VERSION = "3.0.1"
-ROBINHOOD_VERSION = "3.11.5"
-SPDLOG_VERSION = "1.16.0"
-TBB_VERSION = "2022.2.0"
-TIFF_VERSION = "4.7.1"
+ROBIN_HOOD_HASHING_VERSION = "3.11.5"
+SPDLOG_VERSION = "1.17.0"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -63,7 +63,7 @@ class LuxCoreDeps(ConanFile):
 
     def requirements(self):
         self.requires(
-            f"onetbb/{TBB_VERSION}",
+            f"onetbb/{ONETBB_VERSION}",
             override=True,
             libs=True,
             transitive_libs=True,
@@ -81,7 +81,7 @@ class LuxCoreDeps(ConanFile):
             transitive_libs=True,
         )
         self.requires(
-            f"libtiff/{TIFF_VERSION}",
+            f"libtiff/{LIBTIFF_VERSION}",
             override=True,
         )
         self.requires(
@@ -109,10 +109,14 @@ class LuxCoreDeps(ConanFile):
 
         # Header only deps - make them transitive
         self.requires(
-            f"robin-hood-hashing/{ROBINHOOD_VERSION}", transitive_headers=True
+            f"robin-hood-hashing/{ROBIN_HOOD_HASHING_VERSION}",
+            transitive_headers=True
         )
         self.requires(f"eigen/{EIGEN_VERSION}", transitive_headers=True)
-        self.requires(f"nlohmann_json/{JSON_VERSION}", transitive_headers=True)
+        self.requires(
+            f"nlohmann_json/{NLOHMANN_JSON_VERSION}",
+            transitive_headers=True
+        )
         self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
         self.requires(

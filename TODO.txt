@@ -1,7 +1,7 @@
 Remove all test building (there are still packages that build tests...)
-Post PR to modify openimageio (fmt as private dep in CMake)
-Remove Python requirements (there are packages that require Python, should not exist)
 OIIO: don't build executables (oiiotools)
 Address warnings
 Reduce embedded deps
 Include licenses
+OIDN: add gpu plugins
+Doxygen: remove (should be installed by developer)
