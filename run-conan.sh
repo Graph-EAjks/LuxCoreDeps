@@ -39,13 +39,15 @@ function debug() {
 set -exo pipefail
 
 if [[ "$RUNNER_OS" == "Linux" && "$CI" == "true" ]]; then
-  # Linux - Local CI
+  echo "Linux - CI"
   cache_dir=/conan-cache
 elif [[ "$RUNNER_OS" == "Linux" && -z "$CI" ]]; then
   # Linux - Plain local build
+  echo "Linux - Plain local build"
   cache_dir=/tmp/conan-cache
 else
   # Others
+  echo "MacOS or Windows - CI build"
   cache_dir=$WORKSPACE/conan-cache
 fi
 
