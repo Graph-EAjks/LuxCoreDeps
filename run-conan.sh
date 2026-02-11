@@ -38,7 +38,7 @@ function debug() {
 # 0. Initialize: set globals and install conan and ninja
 set -exo pipefail
 
-if [[ "$RUNNER_OS" == "Linux" && -v "$CI" ]]; then
+if [[ "$RUNNER_OS" == "Linux" && -n "$CI" ]]; then
   echo "Linux - CI"
   cache_dir=/conan-cache
 elif [[ "$RUNNER_OS" == "Linux" && -z "$CI" ]]; then
