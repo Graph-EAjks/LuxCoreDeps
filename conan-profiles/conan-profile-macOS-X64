@@ -23,7 +23,7 @@ MACOSX_DEPLOYMENT_TARGET=11.0
 
 [conf]
 &:tools.build:cxxflags+=["-ftree-vectorize", "-march=x86-64-v3", "-O3"]
-tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos-vars-X64.cmake
+tools.cmake.cmaketoolchain:user_toolchain+={{os.getenv("LUX_PROFILE_DIR", profile_dir)}}/macos-vars-X64.cmake
 openvdb/*:tools.build:cxxflags+=["-Wno-error", "-Wno-missing-template-arg-list-after-template-kw"]
 
 # vim: ft=conf
