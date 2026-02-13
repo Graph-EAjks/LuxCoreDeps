@@ -214,6 +214,7 @@ jobs:
             export CONAN_LOG_LEVEL=${{ env.CONAN_LOG_LEVEL }}
             export LUXDEPS_VERSION=${{ env.LUXDEPS_VERSION }}
             export CMAKE_POLICY_VERSION_MINIMUM=3.5
+            export CI=1
 
             # Set Python
             manylinux-interpreters ensure cp313-cp313

@@ -2,3 +2,6 @@ sources:
   "0.6.7":
     url: "https://github.com/aiekick/ImGuiFileDialog/archive/refs/tags/v0.6.7.zip"
     sha256: "939fa922162a490353f17b4bc15e59110fc9ea81c123acc29c6e5f3c8f1bbc7c"
+  "0.6.8":
+    url: "https://github.com/aiekick/ImGuiFileDialog/archive/refs/tags/v0.6.8.zip"
+    sha256: "02517f9184db4301cbbe8cb1d661a5b5b942cfb95f6e3f176535e1a2d2360dc5"

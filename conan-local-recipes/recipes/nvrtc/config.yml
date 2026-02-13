@@ -3,3 +3,5 @@ versions:
     folder: "binary"
   "13.0.88":
     folder: "binary"
+  "13.1.115":
+    folder: "binary"
