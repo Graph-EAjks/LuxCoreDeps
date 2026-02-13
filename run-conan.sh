@@ -15,6 +15,14 @@ test -n "$RUNNER_ARCH" || die "RUNNER_ARCH not set"
 
 CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
 
+# The following variable contains the commit where Conan Center Index will be
+# checked out. This is utterly important for maintenability that Conan Center
+# Index be pinned at a given commit. Otherwise, spurious unwanted updates will
+# gradually happen and finally break the build.
+# To the contrary, you may need to upgrade this commit when you want to upgrade
+# a given dependency.
+CONAN_COMMIT=d60a35f00bf85fd1abf2df0877878f54404e3df0
+
 # Debug utility (install a specific package)
 function debug() {
   conan install \
@@ -28,17 +36,24 @@ function debug() {
 # Script starts here
 
 # 0. Initialize: set globals and install conan and ninja
-set -euxo pipefail
+set -exo pipefail
 
-if [[ "$RUNNER_OS" == "Linux" ]]; then
+if [[ "$RUNNER_OS" == "Linux" && -n "$CI" ]]; then
+  echo "Linux - CI"
   cache_dir=/conan-cache
+elif [[ "$RUNNER_OS" == "Linux" && -z "$CI" ]]; then
+  # Linux - Plain local build
+  echo "Linux - Plain local build"
+  cache_dir=/tmp/conan-cache
 else
+  # Others
+  echo "MacOS or Windows - CI build"
   cache_dir=$WORKSPACE/conan-cache
 fi
 
 echo "::group::CIBW_BEFORE_BUILD: pip"
-pip install conan
-pip install ninja
+pipx install conan
+pipx install ninja
 echo "::endgroup::"
 
 # 1. Clone conancenter at a specific commit and add this cloned repo as a
@@ -50,22 +65,25 @@ echo "::endgroup::"
 #   updates
 # https://docs.conan.io/2/devops/devops_local_recipes_index.html
 echo "::group::CIBW_BEFORE_BUILD: local recipes index repository"
-git clone https://github.com/conan-io/conan-center-index
-cd conan-center-index
-git reset --hard 73bae27b468ae37f5bacd4991d1113aefcf23b2b
-git clean -df  # cleans any untracked files/folders
-cd ..
-conan remote add mycenter ./conan-center-index
+# Delete conan-center-index if exists
+if [ ! -d "conan-center-index" ]; then
+  git clone https://github.com/conan-io/conan-center-index
+  cd conan-center-index
+  git reset --hard ${CONAN_COMMIT}
+  git clean -df  # cleans any untracked files/folders
+  cd ..
+fi
+conan remote add mycenter ./conan-center-index --force
 
 # 2. Add local recipe repository (as a remote)
-conan remote add mylocal ./conan-local-recipes
+conan remote add mylocal ./conan-local-recipes --force
 conan list -r mylocal
 echo "::endgroup::"
 
 if [[ "$RUNNER_OS" == "Linux" ]]; then
   # ispc
   echo "::group::CIBW_BEFORE_BUILD: ispc"
-  source /opt/intel/oneapi/ispc/latest/env/vars.sh
+  source /opt/intel/oneapi/setvars.sh
   echo "::endgroup::"
 fi
 

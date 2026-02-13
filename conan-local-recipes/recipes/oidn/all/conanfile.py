@@ -11,7 +11,7 @@ from conan import ConanFile
 from conan.tools.scm import Git
 
 # Gather here the various dependency versions, for convenience
-TBB_VERSION = "2022.2.0"
+TBB_VERSION = "2022.3.0"
 
 class OidnConan(ConanFile):
     name = "oidn"
@@ -58,8 +58,14 @@ class OidnConan(ConanFile):
         print(res)
         git.clone(
             "https://github.com/OpenImageDenoise/oidn.git",
-            args=["--recursive", f"--branch v{self.version}"],
-            target=Path(self.source_folder) / "oidn"
+            args=[
+                "--recursive",
+                "--single-branch",
+                "--depth 1",
+                f"--branch v{self.version}",
+            ],
+            target=Path(self.source_folder) / "oidn",
+            hide_url=True,
         )
 
 

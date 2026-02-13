@@ -7,15 +7,21 @@ compiler=gcc
 compiler.version={{ os.getenv("GCC_VERSION") }}
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.libcxx=libstdc++11
+compiler.cstd=gnu17
 
 [options]
 openvdb/*:simd=AVX
-gtk/system:version=3
+minizip-ng/*:with_libcomp=False
+#gtk/system:version=3
 
 
 [conf]
-tools.build:cflags=["-march=x86-64-v3"]
-tools.build:cxxflags=["-march=x86-64-v3"]
+tools.build:cflags+=["-march=x86-64-v3", "-Wno-error"]
+tools.build:cxxflags+=["-march=x86-64-v3", "-Wno-error"]
+tools.build:cxxflags+=["-std=c++{{ os.getenv("CXX_VERSION") }}"]
+tools.build:cflags+=["-std=gnu17"]
+tools.gnu:extra_configure_args+=["--disable-silent-rules"]
+tools.cmake.cmaketoolchain:user_toolchain+={{os.getenv("LUX_PROFILE_DIR", profile_dir)}}/linux-vars-X64.cmake
 
 {% if 'SANITIZE' in os.environ -%}
 
@@ -33,3 +39,5 @@ openvdb/*:tools.cmake.cmaketoolchain:extra_variables={ 'USE_CCACHE':'OFF' }
 {% endif %}
 
 onetbb/*:tools.cmake.cmaketoolchain:extra_variables={ 'CMAKE_VERBOSE_MAKEFILE': 'ON' }
+
+# vim: ft=conf
